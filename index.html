@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Onlline Weather App</title>
+    <link rel="stylesheet" href="style.css">
+    <!-- <script src="app.js"> -->
+    <!-- </script> -->
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+</head>
+
+<body>
+
+    <div id="main">
+
+
+        <input type="text" id="cityName" placeholder="Enter Your City Name">
+        <br>
+        <button onclick="think()">CHECK</button>
+        <h1 id="result"> </h1>
+    
+
+    </div>
+
+    <script>
+
+        function think() {
+
+            let cityName = document.getElementById("cityName").value;
+            var result = document.getElementById("result");
+
+            axios.get(`https://api.openweathermap.org/data/2.5/weather?q=${cityName}&appid=063c87a36adc77f026a20fddc95d9390&units=metric`)
+                .then(function (response) {
+
+                    let weatherData = response.data
+                    console.log("weatherData ; ", weatherData);
+
+                    var temp = Number(weatherData?.main?.temp);
+                    var minTemp = Number(weatherData?.main?.temp_min);
+                    var maxTemp = Number(weatherData?.main?.temp_max);
+
+
+                    if (temp < -10 || minTemp < -10) {
+                        result.innerText = "Dont go out its too Cold ";
+                    }
+                    else if (temp > 35 || minTemp > 35) {
+                        result.innerHTML = "Dont go out side its too Hot";
+                    }
+                    else if ((temp >= -10 && temp < 5) ||
+                        (minTemp >= -10 && minTemp < 5)) {
+                        result.innerHTML = "Carry Cout Be CareFull";
+                    }
+                    else if ((temp >= 5 && temp < 20) ||
+                        (minTemp >= 5 && minTemp < 20)) {
+                        result.innerHTML = "Carry Jacket Cool The Weather";
+                    }
+                    else if ((temp >= 20 && temp < 35) ||
+                        (minTemp >= 20 && minTemp < 35)) {
+                        result.innerHTML = "Dont Carry Jacket The Weather is Fine";
+                    }
+                    result.innerText += ` - curent temprature is ${temp}'C and its going to be ${minTemp}'C at minimum`
+
+                })
+
+                .catch(function (error) {
+                    // handle error
+                    console.log(error);
+
+                })
+        }
+    </script>
+
+</body>
+
+</html>
